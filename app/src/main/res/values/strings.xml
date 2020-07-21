@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">WAR</string>
+    <string name="ip_addr">IP Address</string>
+    <string name="port">Port</string>
+    <string name="confirm">Confirm</string>
+    <string name="Cstate">Connection State</string>
+</resources>
