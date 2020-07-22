@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         Chart.setBackgroundColor(Color.WHITE);
         Chart.setScaleEnabled(true);
         Chart.setDrawGridBackground(true);
-        Chart.setVisibleXRangeMaximum(20);
+        Chart.setVisibleXRangeMaximum(20f);
 
         linedataset=new LineDataSet(null,"Frequency");
         linedataset.setColor(Color.CYAN);
@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
         YAxis yl = Chart.getAxisLeft();
         yl.setTextColor(Color.BLUE);
         yl.setDrawGridLines(true);
-        yl.setAxisMinimum(0f);
+        yl.setAxisMinimum(0);
 
         YAxis rightAxis = Chart.getAxisRight();
         rightAxis.setEnabled(false);
@@ -174,8 +174,13 @@ public class MainActivity extends AppCompatActivity {
                                                         PresentData.setText(Cache);
                                                         CMDLine.append(Cache);
                                                         CMDLine.append("\n");
-                                                        Chart.moveViewToX(linedataset.getEntryCount()-20);
-                                                        Toast.makeText(getApplicationContext(),Integer.toString(linedataset.getEntryCount()-20),Toast.LENGTH_LONG).show();
+
+                                                        int count=linedataset.getEntryCount();
+                                                        if(count>20)
+                                                            Chart.moveViewToX(count);
+                                                        else
+                                                            Chart.invalidate();
+                                                        //Toast.makeText(getApplicationContext(),Integer.toString(linedataset.getEntryCount()-20),Toast.LENGTH_LONG).show();
                                                         //Chart.invalidate();
                                                         //Chart.notifyDataSetChanged();
                                                         //Chart.invalidate();
