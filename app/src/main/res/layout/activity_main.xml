@@ -12,8 +12,8 @@
         style="@style/Widget.AppCompat.EditText"
         android:layout_width="150dp"
         android:layout_height="45dp"
-        android:layout_marginStart="116dp"
-        android:layout_marginTop="101dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="15dp"
         android:autofillHints="5960"
         android:ems="10"
         android:hint="5960"
@@ -25,10 +25,10 @@
     <Button
         android:id="@+id/Confirm"
         style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="156dp"
-        android:layout_height="45dp"
-        android:layout_marginStart="116dp"
-        android:layout_marginTop="32dp"
+        android:layout_width="151dp"
+        android:layout_height="46dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="16dp"
         android:backgroundTint="#000000"
         android:text="@string/confirm"
         app:layout_constraintStart_toStartOf="parent"
@@ -38,7 +38,7 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="112dp"
+        android:layout_marginTop="28dp"
         android:layout_marginEnd="20dp"
         android:text="@string/port"
         app:layout_constraintEnd_toStartOf="@+id/Port"
@@ -48,8 +48,8 @@
         android:id="@+id/ConnectionState"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="116dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="16dp"
         android:buttonTint="#00FF0A"
         android:clickable="false"
         android:text="@string/Cstate"
@@ -58,19 +58,53 @@
 
     <EditText
         android:id="@+id/CMDLine"
-        android:layout_width="242dp"
-        android:layout_height="301dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="24dp"
+        android:layout_width="61dp"
+        android:layout_height="88dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="16dp"
         android:background="#000000"
-        android:editable="false"
         android:ems="10"
         android:gravity="start|top"
         android:inputType="textMultiLine"
         android:textColor="#FFFFFF"
         android:textIsSelectable="true"
         android:textSize="10sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ConnectionState" />
+
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/Chart"
+        android:layout_width="448dp"
+        android:layout_height="239dp"
+
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintStart_toEndOf="@+id/Confirm"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+
+        />
+
+    <EditText
+        android:id="@+id/PresentData"
+        android:layout_width="79dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="26dp"
+        android:layout_marginTop="17dp"
+        android:ems="10"
+        android:inputType="number"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@+id/CMDLine"
+        app:layout_constraintTop_toBottomOf="@+id/Label" />
+
+    <TextView
+        android:id="@+id/Label"
+        android:layout_width="79dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="26dp"
+        android:layout_marginTop="22dp"
+        android:text="Present Data"
+        app:layout_constraintStart_toEndOf="@+id/CMDLine"
+        app:layout_constraintTop_toBottomOf="@+id/ConnectionState" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
