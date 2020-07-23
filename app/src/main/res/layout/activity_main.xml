@@ -1,110 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/MainWindow"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity">
-
-    <EditText
-        android:id="@+id/Port"
-        style="@style/Widget.AppCompat.EditText"
-        android:layout_width="150dp"
-        android:layout_height="45dp"
-        android:layout_marginStart="60dp"
-        android:layout_marginTop="15dp"
-        android:autofillHints="5960"
-        android:ems="10"
-        android:hint="5960"
-        android:inputType="number"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/Confirm"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="151dp"
-        android:layout_height="46dp"
-        android:layout_marginStart="60dp"
-        android:layout_marginTop="16dp"
-        android:backgroundTint="#000000"
-        android:text="@string/confirm"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Port" />
-
-    <TextView
-        android:id="@+id/textView2"
+    android:id="@+id/HscrollView"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="10dp">
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/VscrollView"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:layout_marginEnd="20dp"
-        android:text="@string/port"
-        app:layout_constraintEnd_toStartOf="@+id/Port"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="wrap_content">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/Layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <Switch
-        android:id="@+id/ConnectionState"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="60dp"
-        android:layout_marginTop="16dp"
-        android:buttonTint="#00FF0A"
-        android:clickable="false"
-        android:text="@string/Cstate"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Confirm" />
-
-    <EditText
-        android:id="@+id/CMDLine"
-        android:layout_width="61dp"
-        android:layout_height="88dp"
-        android:layout_marginStart="60dp"
-        android:layout_marginTop="16dp"
-        android:background="#000000"
-        android:ems="10"
-        android:gravity="start|top"
-        android:inputType="textMultiLine"
-        android:textColor="#FFFFFF"
-        android:textIsSelectable="true"
-        android:textSize="10sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ConnectionState" />
-
-    <com.github.mikephil.charting.charts.LineChart
-        android:id="@+id/Chart"
-        android:layout_width="448dp"
-        android:layout_height="239dp"
-
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toEndOf="@+id/Confirm"
-        app:layout_constraintTop_toTopOf="parent"
-
-        />
-
-    <EditText
-        android:id="@+id/PresentData"
-        android:layout_width="79dp"
-        android:layout_height="38dp"
-        android:layout_marginStart="26dp"
-        android:layout_marginTop="17dp"
-        android:ems="10"
-        android:inputType="number"
-        android:textSize="12sp"
-        app:layout_constraintStart_toEndOf="@+id/CMDLine"
-        app:layout_constraintTop_toBottomOf="@+id/Label" />
-
-    <TextView
-        android:id="@+id/Label"
-        android:layout_width="79dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="26dp"
-        android:layout_marginTop="22dp"
-        android:text="Present Data"
-        app:layout_constraintStart_toEndOf="@+id/CMDLine"
-        app:layout_constraintTop_toBottomOf="@+id/ConnectionState" />
+            <EditText
+                android:id="@+id/Port"
+                style="@style/Widget.AppCompat.EditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="4dp"
+                android:autofillHints="5960"
+                android:ems="10"
+                android:hint="5960"
+                android:inputType="number"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                app:layout_constraintStart_toEndOf="@+id/textView2"
+                app:layout_constraintTop_toTopOf="parent" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <Button
+                android:id="@+id/Confirm"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_width="209dp"
+                android:layout_height="46dp"
+                android:layout_marginStart="68dp"
+                android:layout_marginTop="28dp"
+                android:backgroundTint="#000000"
+                android:text="@string/confirm"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/Port" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="64dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/port"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Switch
+                android:id="@+id/ConnectionState"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="88dp"
+                android:layout_marginTop="20dp"
+                android:buttonTint="#00FF0A"
+                android:clickable="false"
+                android:text="@string/Cstate"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/Confirm" />
+
+            <EditText
+                android:id="@+id/CMDLine"
+                android:layout_width="114dp"
+                android:layout_height="69dp"
+
+                android:layout_marginStart="36dp"
+                android:layout_marginTop="49dp"
+                android:background="#000000"
+                android:ems="10"
+                android:gravity="start|top"
+                android:inputType="textMultiLine"
+                android:textColor="#FFFFFF"
+                android:textIsSelectable="true"
+                android:textSize="10sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ConnectionState" />
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/Chart"
+                android:layout_width="310dp"
+                android:layout_height="203dp"
+                android:layout_marginStart="36dp"
+                android:layout_marginTop="36dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/CMDLine" />
+
+            <EditText
+                android:id="@+id/PresentData"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="12dp"
+                android:ems="10"
+                android:inputType="number"
+                android:textSize="12sp"
+                app:layout_constraintStart_toEndOf="@+id/CMDLine"
+                app:layout_constraintTop_toBottomOf="@+id/Label" />
+
+            <TextView
+                android:id="@+id/Label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="44dp"
+                android:text="Present Data"
+                app:layout_constraintStart_toEndOf="@+id/CMDLine"
+                app:layout_constraintTop_toBottomOf="@+id/ConnectionState" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</HorizontalScrollView>
