@@ -70,8 +70,8 @@
                 android:layout_width="114dp"
                 android:layout_height="69dp"
 
-                android:layout_marginStart="36dp"
-                android:layout_marginTop="49dp"
+                android:layout_marginStart="28dp"
+                android:layout_marginTop="180dp"
                 android:background="#000000"
                 android:ems="10"
                 android:gravity="start|top"
@@ -86,17 +86,26 @@
                 android:id="@+id/Chart"
                 android:layout_width="310dp"
                 android:layout_height="203dp"
-                android:layout_marginStart="36dp"
-                android:layout_marginTop="36dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="44dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/CMDLine" />
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/ChartPresent"
+                android:layout_width="310dp"
+                android:layout_height="203dp"
+                android:layout_marginStart="28dp"
+                android:layout_marginTop="52dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/Chart" />
 
             <EditText
                 android:id="@+id/PresentData"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="40dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginStart="48dp"
+                android:layout_marginTop="8dp"
                 android:ems="10"
                 android:inputType="number"
                 android:textSize="12sp"
@@ -107,11 +116,63 @@
                 android:id="@+id/Label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="40dp"
-                android:layout_marginTop="44dp"
+                android:layout_marginStart="60dp"
+                android:layout_marginTop="180dp"
                 android:text="Present Data"
                 app:layout_constraintStart_toEndOf="@+id/CMDLine"
                 app:layout_constraintTop_toBottomOf="@+id/ConnectionState" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="132dp"
+                android:layout_marginTop="16dp"
+                android:text="Global"
+                app:layout_constraintStart_toStartOf="@+id/CMDLine"
+                app:layout_constraintTop_toBottomOf="@+id/PresentData" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="160dp"
+                android:layout_marginTop="20dp"
+                android:text="Runtime"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/Chart" />
+
+            <Button
+                android:id="@+id/Stop"
+                android:layout_width="205dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="68dp"
+                android:layout_marginTop="20dp"
+                android:text="Stop"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ConnectionState" />
+
+            <Button
+                android:id="@+id/Save"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="20dp"
+                android:text="Save Data"
+                app:layout_constraintStart_toEndOf="@+id/FileName"
+                app:layout_constraintTop_toBottomOf="@+id/Stop" />
+
+            <EditText
+                android:id="@+id/FileName"
+                android:layout_width="126dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="64dp"
+                android:layout_marginTop="32dp"
+                android:ems="10"
+                android:hint="FileName"
+                android:inputType="textPersonName"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/Stop" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

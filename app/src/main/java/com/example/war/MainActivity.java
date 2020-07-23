@@ -1,15 +1,15 @@
 package com.example.war;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.pm.ActivityInfo;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Switch;
+import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,26 +21,24 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.InputStreamReader;
-import java.net.InetAddress;
+import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
 import java.util.Vector;
 
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button CButton;
+    private Button CButton,Stop,Save;
     private Switch State;
-    private TextView Port,CMDLine,PresentData;
-    private LineChart Chart;
+    private TextView Port,CMDLine,PresentData,FileName;
+    private LineChart Chart,ChartPresent;
 
     private int port;
 
@@ -59,15 +57,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
+        Save=(Button)findViewById(R.id.Save);
+        Save.setClickable(false);
+        Stop=(Button)findViewById(R.id.Stop);
+        Stop.setClickable(false);
         CButton=(Button)findViewById(R.id.Confirm);
         Port=(TextView)findViewById(R.id.Port);
         State=(Switch)findViewById(R.id.ConnectionState);
         CMDLine=(TextView)findViewById(R.id.CMDLine);
         CMDLine.setKeyListener(null);
+        FileName=(TextView)findViewById(R.id.FileName);
         PresentData=(TextView)findViewById(R.id.PresentData);
         PresentData.setKeyListener(null);
         Chart=(LineChart)findViewById(R.id.Chart);
+        ChartPresent=(LineChart)findViewById(R.id.ChartPresent);
 
         DataNow=0;
         DataArray=new Vector();
@@ -77,20 +80,37 @@ public class MainActivity extends AppCompatActivity {
         Chart.setBackgroundColor(Color.WHITE);
         Chart.setScaleEnabled(true);
         Chart.setDrawGridBackground(true);
-        Chart.setVisibleXRangeMaximum(20f);
+        Description des1=new Description();
+        des1.setText("Global");
+        Chart.setDescription(des1);
+
+        ChartPresent.setNoDataText("Data Real Time");
+        ChartPresent.setTouchEnabled(false);
+        ChartPresent.setBackgroundColor(Color.WHITE);
+        ChartPresent.setScaleEnabled(false);
+        Description des2=new Description();
+        des2.setText("Runtime");
+        ChartPresent.setDescription(des2);
+        ChartPresent.setDrawGridBackground(true);
+        ChartPresent.setVisibleXRangeMaximum(20);
 
         linedataset=new LineDataSet(null,"Frequency");
-        linedataset.setColor(Color.CYAN);
-        linedataset.setCircleColor(Color.GREEN);
-        //linedataset.setCircleSize();
-        linedataset.setLineWidth(3f);
+        linedataset.setColor(Color.rgb(255,0,255));
+        linedataset.setCircleColor(Color.RED);
+        linedataset.setLineWidth(1f);
         linedataset.setDrawValues(true);
         linedataset.setAxisDependency(YAxis.AxisDependency.LEFT);
 
         linedata=new LineData(linedataset);
         linedata.setValueTextColor(Color.BLUE);
         Chart.setData(linedata);
+        ChartPresent.setData(linedata);
+
         Legend Flegend=Chart.getLegend();
+        Flegend.setForm(Legend.LegendForm.CIRCLE);
+        Flegend.setTextColor(Color.BLUE);
+
+        Flegend=ChartPresent.getLegend();
         Flegend.setForm(Legend.LegendForm.CIRCLE);
         Flegend.setTextColor(Color.BLUE);
 
@@ -102,6 +122,7 @@ public class MainActivity extends AppCompatActivity {
         xl.setAxisMinimum(0f);
 
         YAxis yl = Chart.getAxisLeft();
+        yl.setValueFormatter(new IndexAxisValueFormatter());
         yl.setTextColor(Color.BLUE);
         yl.setDrawGridLines(true);
         yl.setAxisMinimum(0);
@@ -109,11 +130,25 @@ public class MainActivity extends AppCompatActivity {
         YAxis rightAxis = Chart.getAxisRight();
         rightAxis.setEnabled(false);
 
+        xl = ChartPresent.getXAxis();
+        xl.setTextColor(Color.BLUE);
+        xl.setDrawGridLines(true);
+        xl.setAvoidFirstLastClipping(true);
+        xl.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xl.setAxisMinimum(0f);
+
+        yl = ChartPresent.getAxisLeft();
+        yl.setTextColor(Color.BLUE);
+        yl.setDrawGridLines(true);
+        yl.setAxisMinimum(0);
+
+        rightAxis = ChartPresent.getAxisRight();
+        rightAxis.setEnabled(false);
 
         CButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Toast.makeText(getApplicationContext(),"Start to Listen",Toast.LENGTH_LONG).show();
                 String cache=Port.getText().toString();
                 if(cache.isEmpty())
                 {
@@ -130,6 +165,7 @@ public class MainActivity extends AppCompatActivity {
                                                   @Override
                                                   public void run() {
                                                       CButton.setClickable(false);
+                                                      Stop.setClickable(true);
                                                   }
                                               });
 
@@ -150,21 +186,11 @@ public class MainActivity extends AppCompatActivity {
                                     if(Cache!=null) {
                                         if (!Cache.isEmpty()) {
                                             DataNow = Integer.parseInt(Cache);
-                                            //if(DataArray==null)
-                                            {
-                                                //DataArray.add(new Entry(0,DataNow));
-                                                //linedataset.addEntry(new Entry(0,DataNow));
-                                            }
-                                            //else {
-                                                //DataArray.add(new Entry(DataArray.size(), DataNow));
-                                            //}
-                                            //linedataset.addEntry(new Entry(linedataset.getXMax(),DataNow));
                                             DataArray.addElement(DataNow);
                                             linedataset.addEntry(new Entry(linedataset.getEntryCount(),DataNow));
                                             linedata.notifyDataChanged();
                                             Chart.notifyDataSetChanged();
-
-
+                                            ChartPresent.notifyDataSetChanged();
 
                                             runOnUiThread(new Runnable() {
                                                 @Override
@@ -175,10 +201,14 @@ public class MainActivity extends AppCompatActivity {
                                                         CMDLine.append("\n");
 
                                                         int count=linedataset.getEntryCount();
+                                                        Chart.invalidate();
                                                         if(count>20)
-                                                            Chart.moveViewToX(count);
+                                                        {
+                                                            ChartPresent.setVisibleXRangeMaximum(20);
+                                                            ChartPresent.moveViewToX(count-20);
+                                                        }
                                                         else
-                                                            Chart.invalidate();
+                                                            ChartPresent.invalidate();
                                                         //Toast.makeText(getApplicationContext(),Integer.toString(linedataset.getEntryCount()-20),Toast.LENGTH_LONG).show();
                                                         //Chart.invalidate();
                                                         //Chart.notifyDataSetChanged();
@@ -230,5 +260,63 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        Stop.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view) {
+                try {
+                    Client_Socket.close();
+                    Server_Socket.close();
+                    State.setChecked(false);
+                    Save.setClickable(true);
+                    CButton.setClickable(true);
+                }catch (Exception e)
+                {
+                    Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        Save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String filename=FileName.getText().toString();
+                if(filename.isEmpty())
+                {
+                    Toast.makeText(getApplicationContext(),"Enter a valid File Name",Toast.LENGTH_LONG).show();
+                    return;
+                }
+                Intent exploer=new Intent(Intent.ACTION_GET_CONTENT);
+                exploer.addCategory(Intent.CATEGORY_OPENABLE);
+                startActivity(exploer);
+                File datafile=new File(exploer.getCategories().toString(),filename+".txt");
+                PrintStream fout=null;
+                try {
+                    fout=new PrintStream(datafile);
+                    for(int i=0;i<DataArray.size();i++)
+                    {
+                        fout.println(Integer.toString(i)+"s  "+DataArray.get(i).toString()+"Hz");
+                    }
+                    fout.close();
+                    Toast.makeText(getApplicationContext(),"File saved!",Toast.LENGTH_LONG).show();
+
+                    DataArray.clear();
+                    DataNow=0;
+                    linedataset.clear();
+                    linedata.notifyDataChanged();
+                    Chart.notifyDataSetChanged();
+                    ChartPresent.notifyDataSetChanged();
+                    Chart.invalidate();
+                    ChartPresent.invalidate();
+
+                }
+                catch (Exception e)
+                {
+                    Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
     }
 }
