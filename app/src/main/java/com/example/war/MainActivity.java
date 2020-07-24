@@ -1,9 +1,19 @@
 package com.example.war;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
@@ -27,7 +37,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
-import java.io.PrintStream;
+import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Vector;
@@ -49,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
     public Vector DataArray;
     private LineDataSet linedataset;
     private LineData linedata;
-
+    private String filename;
 
 
     @Override
@@ -58,9 +68,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Save=(Button)findViewById(R.id.Save);
-        Save.setClickable(false);
+        Save.setEnabled(false);
         Stop=(Button)findViewById(R.id.Stop);
-        Stop.setClickable(false);
+        Stop.setEnabled(false);
         CButton=(Button)findViewById(R.id.Confirm);
         Port=(TextView)findViewById(R.id.Port);
         State=(Switch)findViewById(R.id.ConnectionState);
@@ -148,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
         CButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(),"Start to Listen",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),"Start to Listen",Toast.LENGTH_SHORT).show();
                 String cache=Port.getText().toString();
                 if(cache.isEmpty())
                 {
@@ -164,8 +174,8 @@ public class MainActivity extends AppCompatActivity {
                                 runOnUiThread(new Runnable() {
                                                   @Override
                                                   public void run() {
-                                                      CButton.setClickable(false);
-                                                      Stop.setClickable(true);
+                                                      CButton.setEnabled(false);
+                                                      Stop.setEnabled(true);
                                                   }
                                               });
 
@@ -239,8 +249,8 @@ public class MainActivity extends AppCompatActivity {
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        CButton.setClickable(true);
-                                        State.setChecked(false);
+                                        CButton.setEnabled(true);
+                                        State.setEnabled(false);
                                         Toast.makeText(getApplicationContext(),ex.getMessage(),Toast.LENGTH_LONG).show();
                                     }
                                 });
@@ -269,37 +279,9 @@ public class MainActivity extends AppCompatActivity {
                     Client_Socket.close();
                     Server_Socket.close();
                     State.setChecked(false);
-                    Save.setClickable(true);
-                    CButton.setClickable(true);
-                }catch (Exception e)
-                {
-                    Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-
-        Save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String filename=FileName.getText().toString();
-                if(filename.isEmpty())
-                {
-                    Toast.makeText(getApplicationContext(),"Enter a valid File Name",Toast.LENGTH_LONG).show();
-                    return;
-                }
-                Intent exploer=new Intent(Intent.ACTION_GET_CONTENT);
-                exploer.addCategory(Intent.CATEGORY_OPENABLE);
-                startActivity(exploer);
-                File datafile=new File(exploer.getCategories().toString(),filename+".txt");
-                PrintStream fout=null;
-                try {
-                    fout=new PrintStream(datafile);
-                    for(int i=0;i<DataArray.size();i++)
-                    {
-                        fout.println(Integer.toString(i)+"s  "+DataArray.get(i).toString()+"Hz");
-                    }
-                    fout.close();
-                    Toast.makeText(getApplicationContext(),"File saved!",Toast.LENGTH_LONG).show();
+                    Save.setEnabled(true);
+                    CButton.setEnabled(true);
+                    Stop.setEnabled(false);
 
                     DataArray.clear();
                     DataNow=0;
@@ -308,7 +290,46 @@ public class MainActivity extends AppCompatActivity {
                     Chart.notifyDataSetChanged();
                     ChartPresent.notifyDataSetChanged();
                     Chart.invalidate();
+                    ChartPresent.moveViewToX(0);
                     ChartPresent.invalidate();
+
+                }catch (Exception e)
+                {
+                    Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        Save.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.R)
+            @Override
+            public void onClick(View view) {
+                filename=FileName.getText().toString();
+
+                if(filename.isEmpty())
+                {
+                    Toast.makeText(getApplicationContext(),"Enter a valid File Name",Toast.LENGTH_LONG).show();
+                    return;
+                }
+                try {
+                    String GlobalFileName=filename+".csv";
+                    File file=new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM),GlobalFileName);
+                    if(!file.exists())
+                        file.createNewFile();
+                    else
+                    {
+                        Toast.makeText(getApplicationContext(),"File Exists!",Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    FileOutputStream fout=new FileOutputStream(file);
+                    OutputStreamWriter ow= new OutputStreamWriter(fout,"UTF-8");
+                    ow.write("Time /s,Frequency /Hz");
+                    for(int i=0;i<DataArray.size();i++)
+                    {
+                        ow.write(Integer.toString((i))+","+DataArray.get(i).toString()+"\n");
+                    }
+                    ow.close();
+                    Toast.makeText(getApplicationContext(),"File saved in "+Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)+"/"+GlobalFileName,Toast.LENGTH_LONG).show();
 
                 }
                 catch (Exception e)
@@ -317,6 +338,5 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
 }
