@@ -176,6 +176,7 @@ public class MainActivity extends AppCompatActivity {
                                                   public void run() {
                                                       CButton.setEnabled(false);
                                                       Stop.setEnabled(true);
+                                                      Save.setEnabled(false);
                                                   }
                                               });
 
@@ -219,10 +220,6 @@ public class MainActivity extends AppCompatActivity {
                                                         }
                                                         else
                                                             ChartPresent.invalidate();
-                                                        //Toast.makeText(getApplicationContext(),Integer.toString(linedataset.getEntryCount()-20),Toast.LENGTH_LONG).show();
-                                                        //Chart.invalidate();
-                                                        //Chart.notifyDataSetChanged();
-                                                        //Chart.invalidate();
                                                     }
                                                     catch(Exception E)
                                                     {
@@ -250,6 +247,7 @@ public class MainActivity extends AppCompatActivity {
                                     @Override
                                     public void run() {
                                         CButton.setEnabled(true);
+                                        Save.setEnabled(true);
                                         State.setEnabled(false);
                                         Toast.makeText(getApplicationContext(),ex.getMessage(),Toast.LENGTH_LONG).show();
                                     }
